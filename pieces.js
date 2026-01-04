@@ -2,44 +2,48 @@
 const reponse = await fetch("pieces-autos.json");
 const pieces = await reponse.json();
 
-for (let i = 0; i < pieces.length; i++) {
-  const article = pieces[i];
-  // Récupération de l'élément du DOM qui accueillera les fiches
-  const sectionFiches = document.querySelector(".fiches");
-  // Création d’une balise dédiée à une pièce automobile
-  const pieceElement = document.createElement("article");
-  // Création des balises
-  const imageElement = document.createElement("img");
-  imageElement.src = article.image;
-  const nomElement = document.createElement("h2");
-  nomElement.innerText = article.nom;
-  const prixElement = document.createElement("p");
-  prixElement.innerText = `Prix: ${article.prix} € (${
-    article.prix < 35 ? "€" : "€€€"
-  })`;
-  const categorieElement = document.createElement("p");
-  categorieElement.innerText = article.categorie ?? "(aucune catégorie)";
-  const descriptionElement = document.createElement("p");
-  descriptionElement.innerText =
-    article.description ?? "Pas de description pour le moment.";
-  const stockElement = document.createElement("p");
-  stockElement.innerText = article.disponibilite
-    ? "En stock"
-    : "Rupture de stock";
+function genererPieces(pieces) {
+  for (let i = 0; i < pieces.length; i++) {
+    const article = pieces[i];
+    // Récupération de l'élément du DOM qui accueillera les fiches
+    const sectionFiches = document.querySelector(".fiches");
+    // Création d’une balise dédiée à une pièce automobile
+    const pieceElement = document.createElement("article");
+    // Création des balises
+    const imageElement = document.createElement("img");
+    imageElement.src = article.image;
+    const nomElement = document.createElement("h2");
+    nomElement.innerText = article.nom;
+    const prixElement = document.createElement("p");
+    prixElement.innerText = `Prix: ${article.prix} € (${
+      article.prix < 35 ? "€" : "€€€"
+    })`;
+    const categorieElement = document.createElement("p");
+    categorieElement.innerText = article.categorie ?? "(aucune catégorie)";
+    const descriptionElement = document.createElement("p");
+    descriptionElement.innerText =
+      article.description ?? "Pas de description pour le moment.";
+    const stockElement = document.createElement("p");
+    stockElement.innerText = article.disponibilite
+      ? "En stock"
+      : "Rupture de stock";
 
-  // On rattache la balise article a la section Fiches
-  sectionFiches.appendChild(pieceElement);
-  // On rattache l’image à pieceElement (la balise article)
-  pieceElement.appendChild(imageElement);
-  pieceElement.appendChild(nomElement);
-  pieceElement.appendChild(prixElement);
-  pieceElement.appendChild(categorieElement);
-  //Ajout des éléments au DOM pour l'exercice
-  pieceElement.appendChild(descriptionElement);
-  pieceElement.appendChild(stockElement);
+    // On rattache la balise article a la section Fiches
+    sectionFiches.appendChild(pieceElement);
+    // On rattache l’image à pieceElement (la balise article)
+    pieceElement.appendChild(imageElement);
+    pieceElement.appendChild(nomElement);
+    pieceElement.appendChild(prixElement);
+    pieceElement.appendChild(categorieElement);
+    //Ajout des éléments au DOM pour l'exercice
+    pieceElement.appendChild(descriptionElement);
+    pieceElement.appendChild(stockElement);
+  }
 }
 
-//gestion des boutons
+genererPieces(pieces);
+
+//gestion des bouttons
 const boutonTrier = document.querySelector(".btn-trier");
 
 boutonTrier.addEventListener("click", function () {
@@ -47,7 +51,8 @@ boutonTrier.addEventListener("click", function () {
   piecesOrdonnees.sort(function (a, b) {
     return a.prix - b.prix;
   });
-  console.log(piecesOrdonnees);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesOrdonnees);
 });
 
 const boutonFiltrer = document.querySelector(".btn-filtrer");
@@ -56,7 +61,8 @@ boutonFiltrer.addEventListener("click", function () {
   const piecesFiltrees = pieces.filter(function (piece) {
     return piece.prix <= 35;
   });
-  console.log(piecesFiltrees);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesFiltrees);
 });
 
 //Correction Exercice
@@ -67,7 +73,8 @@ boutonDecroissant.addEventListener("click", function () {
   piecesOrdonnees.sort(function (a, b) {
     return b.prix - a.prix;
   });
-  console.log(piecesOrdonnees);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesOrdonnees);
 });
 
 const boutonNoDescription = document.querySelector(".btn-nodesc");
@@ -76,7 +83,8 @@ boutonNoDescription.addEventListener("click", function () {
   const piecesFiltrees = pieces.filter(function (piece) {
     return piece.description;
   });
-  console.log(piecesFiltrees);
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesFiltrees);
 });
 
 const noms = pieces.map((piece) => piece.nom);
@@ -86,7 +94,10 @@ for (let i = pieces.length - 1; i >= 0; i--) {
   }
 }
 console.log(noms);
+//Création de l'en-tête
 
+const pElement = document.createElement("p");
+pElement.innerText = "Pièces abordables";
 //Création de la liste
 const abordablesElements = document.createElement("ul");
 //Ajout de chaque nom à la liste
@@ -96,7 +107,10 @@ for (let i = 0; i < noms.length; i++) {
   abordablesElements.appendChild(nomElement);
 }
 // Ajout de l'en-tête puis de la liste au bloc résultats filtres
-document.querySelector(".abordables").appendChild(abordablesElements);
+document
+  .querySelector(".abordables")
+  .appendChild(pElement)
+  .appendChild(abordablesElements);
 
 //Code Exercice
 const nomsDisponibles = pieces.map((piece) => piece.nom);
@@ -117,4 +131,20 @@ for (let i = 0; i < nomsDisponibles.length; i++) {
   disponiblesElement.appendChild(nomElement);
 }
 
-document.querySelector(".disponibles").appendChild(disponiblesElement);
+const pElementDisponible = document.createElement("p");
+pElementDisponible.innerText = "Pièces disponibles:";
+document
+  .querySelector(".disponibles")
+  .appendChild(pElementDisponible)
+  .appendChild(disponiblesElement);
+
+const inputPrixMax = document.querySelector(".prix-slider");
+
+inputPrixMax.addEventListener("input", function () {
+  const piecesFiltrees = pieces.filter(function (piece) {
+    return piece.prix <= inputPrixMax.value;
+  });
+  document.querySelector(".fiches").innerHTML = "";
+  genererPieces(piecesFiltrees);
+  document.querySelector(".valeur-prix").innerText = inputPrixMax.value + " €";
+});
