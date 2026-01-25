@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
   <head>
     <meta charset="utf-8" />
     <title>Les Bonnes Pièces</title>
     <link rel="stylesheet" href="styles.css" />
-    <script type="module" src="pieces.js"></script>
+    <script type="module" src="pieces.js" defer></script>
+    <script type="module" src="avis.js" defer></script>
   </head>
   <body>
     <header>
@@ -23,14 +24,43 @@
         <br />
         <button class="btn-nodesc">Filtrer les pièces sans description</button>
         <br />
+        <p>Prix maximum:</p>
         <input
           type="range"
+          name="prix-max"
+          id="prix-max"
           min="0"
           max="60"
           step="5"
-          value="50"
-          class="prix-slider"
         />
+        <input
+          type="range"
+          name="prix-max"
+          id="prix-max"
+          min="0"
+          max="60"
+          step="5"
+        />
+        <h3>Ajouter un avis</h3>
+        <form class="formulaire-avis">
+          Identifiant de la pièce :<br />
+          <input type="number" name="piece-id" /><br />
+          Nom d'utilisateur :<br />
+          <input type="text" name="utilisateur" /><br />
+          Avis :<br />
+          <input type="text" name="commentaire" /><br />
+          Note (0 à 5) :<br />
+          <input
+            type="number"
+            name="nbEtoiles"
+            min="0"
+            max="5"
+            step="1"
+          /><br />
+          <button>Envoyer</button>
+        </form>
+        <h3>Données</h3>
+        <button class="btn-maj">Mettre à jour les pièces</button>
       </section>
 
       <!-- Fiches produits -->
